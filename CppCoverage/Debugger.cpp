@@ -25,6 +25,7 @@
 #include "IDebugEventsHandler.hpp"
 
 #include "Tools/Tool.hpp"
+#include <atlstr.h>
 
 namespace CppCoverage
 {
@@ -115,6 +116,7 @@ namespace CppCoverage
 		{
 			case CREATE_PROCESS_DEBUG_EVENT: OnCreateProcess(debugEvent, debugEventsHandler); break;
 			case CREATE_THREAD_DEBUG_EVENT: OnCreateThread(debugEvent.u.CreateThread.hThread, dwThreadId); break;
+			case OUTPUT_DEBUG_STRING_EVENT: OnDebugStringEvent(GetProcessHandle(dwProcessId), debugEvent.dwThreadId, debugEvent.u.DebugString); break;
 			default:
 			{
 				auto hProcess = GetProcessHandle(dwProcessId);
@@ -278,6 +280,40 @@ namespace CppCoverage
 
 		if (threadHandles_.erase(dwThreadId) != 1)
 			THROW("Cannot find exited thread.");
+	}
+
+	//-------------------------------------------------------------------------
+	void Debugger::OnDebugStringEvent(HANDLE hProcess, DWORD dwThreadId, const OUTPUT_DEBUG_STRING_INFO& debugString)
+	{
+		LOG_DEBUG << "Reached Debug String Event in Debugee with thread:" << dwThreadId;
+
+		// check preconditions
+		if ((debugString.lpDebugStringData == 0) || (debugString.nDebugStringLength == 0))
+		{
+			LOG_DEBUG << "No debug string information.";
+			return;
+		}
+
+		// read string from debugee's address space
+		CStringW strEventMessage;  // force unicode
+
+		WCHAR* msg = new WCHAR[debugString.nDebugStringLength];
+		// Don't care if string is ANSI, and we allocate double...
+
+		ReadProcessMemory(hProcess,       // HANDLE to Debuggee
+			debugString.lpDebugStringData, // Target process' valid pointer
+			msg,                           // Copy to this address space
+			debugString.nDebugStringLength, 
+			NULL);
+
+		if (debugString.fUnicode)
+			strEventMessage = msg;
+		else
+			strEventMessage = (char*)msg; // char* to CStringW (Unicode) conversion.
+
+		delete[]msg;
+		LOG_DEBUG << strEventMessage;
+
 	}
 
 	//-------------------------------------------------------------------------

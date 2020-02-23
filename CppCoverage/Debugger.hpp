@@ -60,6 +60,11 @@ namespace CppCoverage
 
 		void OnExitThread(DWORD dwProcessId);
 
+		void OnDebugStringEvent(
+			HANDLE hProcess,
+			DWORD dwProcessId,
+			const OUTPUT_DEBUG_STRING_INFO& Info);
+
 		HANDLE GetProcessHandle(DWORD dwProcessId) const;
 		HANDLE GetThreadHandle(DWORD dwThreadId) const;
 
