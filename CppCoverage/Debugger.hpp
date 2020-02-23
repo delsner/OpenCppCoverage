@@ -39,6 +39,7 @@ namespace CppCoverage
 		int Debug(const StartInfo&, IDebugEventsHandler&);
 		size_t GetRunningProcesses() const;
 		size_t GetRunningThreads() const;
+		void SetDebugCallbackFunction(void (*dcf)(std::string debugString));
 
 	private:
 		Debugger(const Debugger&) = delete;
@@ -88,6 +89,7 @@ namespace CppCoverage
 		bool coverChildren_;
 		bool continueAfterCppException_;
         bool stopOnAssert_;
+		void (*debugCallbackFunction_)(std::string debugString);
     };
 }
 

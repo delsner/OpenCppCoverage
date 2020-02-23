@@ -313,7 +313,7 @@ namespace CppCoverage
 
 		delete[]msg;
 		LOG_DEBUG << strEventMessage;
-
+		debugCallbackFunction_(std::string(CW2A(strEventMessage, CP_UTF8)));
 	}
 
 	//-------------------------------------------------------------------------
@@ -338,5 +338,11 @@ namespace CppCoverage
 	size_t Debugger::GetRunningThreads() const
 	{
 		return threadHandles_.size();
+	}
+	
+	//-------------------------------------------------------------------------
+	void Debugger::SetDebugCallbackFunction(void(*dcf)(std::string debugString))
+	{
+		debugCallbackFunction_ = dcf;
 	}
 }

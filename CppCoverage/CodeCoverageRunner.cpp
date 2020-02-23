@@ -65,6 +65,11 @@ namespace CppCoverage
 	{
 		Debugger debugger{ settings.GetCoverChildren(), settings.GetContinueAfterCppException(), settings.GetStopOnAssert()};
 
+		if (settings.GetDebugCallbackFunction() != nullptr)
+		{
+			debugger.SetDebugCallbackFunction(settings.GetDebugCallbackFunction());
+		}
+
 		coverageFilterManager_ = std::make_shared<CoverageFilterManager>(
 			settings.GetCoverageFilterSettings(),
 			settings.GetUnifiedDiffSettings(), 
