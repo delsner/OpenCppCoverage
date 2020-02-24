@@ -341,8 +341,8 @@ namespace CppCoverage
 	}
 	
 	//-------------------------------------------------------------------------
-	void Debugger::SetDebugCallbackFunction(void(*dcf)(std::string debugString))
+	void Debugger::SetDebugCallbackFunction(std::function<void(std::string)> callback)
 	{
-		debugCallbackFunction_ = dcf;
+		debugCallbackFunction_ = callback;
 	}
 }

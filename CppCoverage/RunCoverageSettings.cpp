@@ -35,7 +35,7 @@ namespace CppCoverage
 	      optimizedBuildSupport_{false},
 	      excludedLineRegexes_{excludedLineRegexes},
 	      substitutePdbSourcePath_{substitutePdbSourcePath},
-		  debugCallbackFunction_{nullptr}
+		  enableDebugCallback_{false}
 	{
 	}
 
@@ -70,15 +70,15 @@ namespace CppCoverage
 	}
 
 	//-------------------------------------------------------------------------
-	void RunCoverageSettings::SetDebugCallbackFunction(debugCallbackFunctionPtr dcf)
+	void RunCoverageSettings::SetEnableDebugCallback(bool enableDebugCallback)
 	{
-		debugCallbackFunction_ = dcf;
+		enableDebugCallback_ = enableDebugCallback;
 	}
 
 	//-------------------------------------------------------------------------
-	debugCallbackFunctionPtr RunCoverageSettings::GetDebugCallbackFunction() const
+	bool RunCoverageSettings::GetEnableDebugCallback() const
 	{
-		return debugCallbackFunction_;
+		return enableDebugCallback_;
 	}
 
 	//-------------------------------------------------------------------------
