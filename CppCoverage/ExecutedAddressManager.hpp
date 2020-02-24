@@ -47,13 +47,13 @@ namespace CppCoverage
 			unsigned char instruction);
 
 		boost::optional<unsigned char> MarkAddressAsExecuted(const Address&);
+		void RestoreCoverage();
 
 		Plugin::CoverageData CreateCoverageData(const std::wstring& name, int exitCode) const;
 		void OnExitProcess(HANDLE hProcess);
 
 	private:
 		struct Module;
-		struct File;
 		struct File;
 		struct Line;
 		struct LastModule
@@ -72,5 +72,6 @@ namespace CppCoverage
 		std::map<std::wstring, Module> modules_;
 		std::map<Address, Line> addressLineMap_;
 		LastModule lastModule_;
+		std::vector<Address> executedAddresses_;
 	};
 }

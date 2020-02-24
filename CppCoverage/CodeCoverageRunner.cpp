@@ -83,6 +83,7 @@ namespace CppCoverage
 			// set debug callback function, which captures *all* enclosing variables by reference
 			auto debugCallbackFunction = [&](std::string debugString) -> void {
 				auto coverageData = executedAddressManager_->CreateCoverageData(settings.GetStartInfo().GetPath().filename().wstring(), 0);
+				executedAddressManager_->RestoreCoverage();
 				settings.GetDebugCallbackFunction()(debugString, std::move(coverageData));
 			};
 			debugger.SetDebugCallbackFunction(debugCallbackFunction);

@@ -99,7 +99,7 @@ namespace CppCoverage
 		LOG_TRACE << "RegisterAddress: " << address << " for " << filename << ":" << lineNumber;
 
 		// Different {filename, line} can have the same address.
-		// Same {filename, line} can have several addresses.		
+		// Same {filename, line} can have several addresses.	
 		bool keepBreakpoint = false;
 		auto itAddress = addressLineMap_.find(address);
 
@@ -142,7 +142,34 @@ namespace CppCoverage
 				THROW("Invalid pointer");
 			*hasBeenExecuted = true;
 		}
+
+		// store executed lines
+		executedAddresses_.push_back(address);
+
 		return line.instructionToRestore_;
+	}
+
+	//-------------------------------------------------------------------------
+	void ExecutedAddressManager::RestoreCoverage()
+	{
+		for (auto address : executedAddresses_)
+		{
+			auto it = addressLineMap_.find(address);
+
+			// TODO: should we restore the <address, line> tuple as well?
+			if (it == addressLineMap_.end())
+				continue;
+			
+			auto& line = it->second;
+
+			for (bool* hasBeenExecuted : line.hasBeenExecutedCollection_)
+			{
+				if (!hasBeenExecuted)
+					THROW("Invalid pointer");
+				*hasBeenExecuted = false;
+			}
+		}
+		executedAddresses_.clear();
 	}
 	
 	//-------------------------------------------------------------------------
