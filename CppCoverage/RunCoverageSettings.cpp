@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "RunCoverageSettings.hpp"
 
+
 namespace CppCoverage
 {
 	//-------------------------------------------------------------------------
@@ -35,7 +36,7 @@ namespace CppCoverage
 	      optimizedBuildSupport_{false},
 	      excludedLineRegexes_{excludedLineRegexes},
 	      substitutePdbSourcePath_{substitutePdbSourcePath},
-		  enableDebugCallback_{false}
+		  debugCallbackFunction_{nullptr}
 	{
 	}
 
@@ -70,15 +71,15 @@ namespace CppCoverage
 	}
 
 	//-------------------------------------------------------------------------
-	void RunCoverageSettings::SetEnableDebugCallback(bool enableDebugCallback)
+	void RunCoverageSettings::SetDebugCallbackFunction(std::function<void(std::string, Plugin::CoverageData)> debugCallbackFunction)
 	{
-		enableDebugCallback_ = enableDebugCallback;
+		debugCallbackFunction_ = debugCallbackFunction;
 	}
 
 	//-------------------------------------------------------------------------
-	bool RunCoverageSettings::GetEnableDebugCallback() const
+	std::function<void(std::string, Plugin::CoverageData)> RunCoverageSettings::GetDebugCallbackFunction() const
 	{
-		return enableDebugCallback_;
+		return debugCallbackFunction_;
 	}
 
 	//-------------------------------------------------------------------------

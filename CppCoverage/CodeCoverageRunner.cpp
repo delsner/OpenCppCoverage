@@ -65,12 +65,13 @@ namespace CppCoverage
 	{
 		Debugger debugger{ settings.GetCoverChildren(), settings.GetContinueAfterCppException(), settings.GetStopOnAssert()};
 
-		if (settings.GetEnableDebugCallback())
+		if (settings.GetDebugCallbackFunction() != nullptr)
 		{
 			// set debug callback function, which captures *all* enclosing variables by reference
 			auto debugCallbackFunction = [&](std::string debugString) -> void {
 				printf("%s", debugString.c_str());
-				//executedAddressManager_->CreateCoverageData()
+				settings.GetDebugCallbackFunction()(debugString, 
+					executedAddressManager_->CreateCoverageData(settings.GetStartInfo().GetPath().filename().wstring(), 0));
 			};
 			debugger.SetDebugCallbackFunction(debugCallbackFunction);
 		}
