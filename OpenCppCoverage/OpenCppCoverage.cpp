@@ -182,10 +182,8 @@ namespace OpenCppCoverage
                 runCoverageSettings.SetStopOnAssert(options.IsStopOnAssertModeEnabled());
                 runCoverageSettings.SetMaxUnmatchPathsForWarning(maxUnmatchPathsForWarning);
 				runCoverageSettings.SetOptimizedBuildSupport(options.IsOptimizedBuildSupportEnabled());
-				if (options.IsDebugCallbackEnabled())
-				{
-					runCoverageSettings.SetEnableDebugCallback(true);
-				}
+				runCoverageSettings.SetEnableDebugCallback(options.IsDebugCallbackEnabled());
+				
 				auto coverageData = codeCoverageRunner.RunCoverage(runCoverageSettings);
 				exitCode = coverageData.GetExitCode();
 				coveraDatas.push_back(std::move(coverageData));
