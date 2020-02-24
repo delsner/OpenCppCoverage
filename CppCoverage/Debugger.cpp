@@ -293,14 +293,20 @@ namespace CppCoverage
 			LOG_DEBUG << "No debug string information.";
 			return;
 		}
+		
+		if (debugCallbackFunction_ == nullptr)
+		{
+			LOG_DEBUG << "No debug callback function defined.";
+			return;
+		}
 
 		// read string from debugee's address space
 		CStringW strEventMessage;  // force unicode
 
+		// don't care if string is ANSI, and we allocate double...
 		WCHAR* msg = new WCHAR[debugString.nDebugStringLength];
-		// Don't care if string is ANSI, and we allocate double...
 
-		ReadProcessMemory(hProcess,       // HANDLE to Debuggee
+		ReadProcessMemory(hProcess,        // HANDLE to Debuggee
 			debugString.lpDebugStringData, // Target process' valid pointer
 			msg,                           // Copy to this address space
 			debugString.nDebugStringLength, 
@@ -312,7 +318,8 @@ namespace CppCoverage
 			strEventMessage = (char*)msg; // char* to CStringW (Unicode) conversion.
 
 		delete[]msg;
-		LOG_DEBUG << strEventMessage;
+		
+		// call debug callback function with debug string
 		debugCallbackFunction_(std::string(CW2A(strEventMessage, CP_UTF8)));
 	}
 
