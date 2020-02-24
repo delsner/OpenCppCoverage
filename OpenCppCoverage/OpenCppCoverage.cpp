@@ -186,7 +186,9 @@ namespace OpenCppCoverage
 				if (options.IsDebugCallbackEnabled())
 				{
 					auto debugCallbackFunction = [&](std::string debugString, Plugin::CoverageData coverageData) -> void {
-						printf("%s", debugString.c_str());
+						auto htmlExporter = Exporter::HtmlExporter(GetTemplateFolder());
+						std::filesystem::path output = std::filesystem::path(GetDefaultPathPrefix(options)) / "runtimedump" / debugString;
+						htmlExporter.Export(coverageData, output);
 					};
 					runCoverageSettings.SetDebugCallbackFunction(debugCallbackFunction);
 				}

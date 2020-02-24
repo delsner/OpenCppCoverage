@@ -65,17 +65,6 @@ namespace CppCoverage
 	{
 		Debugger debugger{ settings.GetCoverChildren(), settings.GetContinueAfterCppException(), settings.GetStopOnAssert()};
 
-		if (settings.GetDebugCallbackFunction() != nullptr)
-		{
-			// set debug callback function, which captures *all* enclosing variables by reference
-			auto debugCallbackFunction = [&](std::string debugString) -> void {
-				printf("%s", debugString.c_str());
-				settings.GetDebugCallbackFunction()(debugString, 
-					executedAddressManager_->CreateCoverageData(settings.GetStartInfo().GetPath().filename().wstring(), 0));
-			};
-			debugger.SetDebugCallbackFunction(debugCallbackFunction);
-		}
-
 		coverageFilterManager_ = std::make_shared<CoverageFilterManager>(
 			settings.GetCoverageFilterSettings(),
 			settings.GetUnifiedDiffSettings(), 
@@ -88,6 +77,16 @@ namespace CppCoverage
 		    coverageFilterManager_,
 		    std::make_unique<DebugInformationEnumerator>(settings.GetSubstitutePdbSourcePaths()),
 			filterAssistant_);
+
+		if (settings.GetDebugCallbackFunction() != nullptr)
+		{
+			// set debug callback function, which captures *all* enclosing variables by reference
+			auto debugCallbackFunction = [&](std::string debugString) -> void {
+				auto coverageData = executedAddressManager_->CreateCoverageData(settings.GetStartInfo().GetPath().filename().wstring(), 0);
+				settings.GetDebugCallbackFunction()(debugString, std::move(coverageData));
+			};
+			debugger.SetDebugCallbackFunction(debugCallbackFunction);
+		}
 
 		const auto& startInfo = settings.GetStartInfo();
 		int exitCode = debugger.Debug(startInfo, *this);
