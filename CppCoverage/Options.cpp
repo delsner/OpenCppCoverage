@@ -196,6 +196,18 @@ namespace CppCoverage
 	}
 
 	//-------------------------------------------------------------------------
+	void Options::EnableDebugCallback()
+	{
+		isDebugCallbackEnabled_ = true;
+	}
+
+	//-------------------------------------------------------------------------
+	bool Options::IsDebugCallbackEnabled() const
+	{
+		return isDebugCallbackEnabled_;
+	}
+
+	//-------------------------------------------------------------------------
 	void Options::AddExcludedLineRegex(const std::wstring& excludedRegex)
 	{
 		excludedLineRegexes_.push_back(excludedRegex);

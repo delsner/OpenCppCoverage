@@ -70,6 +70,12 @@ namespace CppCoverage
 		void EnableContinueAfterCppExceptionMode();
 		bool IsContinueAfterCppExceptionModeEnabled() const;
 
+		void EnableOptimizedBuildSupport();
+		bool IsOptimizedBuildSupportEnabled() const;
+
+		void EnableDebugCallback();
+		bool IsDebugCallbackEnabled() const;
+
 		void AddExport(OptionsExport&&);
 		const std::vector<OptionsExport>& GetExports() const;
 		
@@ -78,9 +84,6 @@ namespace CppCoverage
 
 		void AddUnifiedDiffSettings(UnifiedDiffSettings&&);
 		const std::vector<UnifiedDiffSettings>& GetUnifiedDiffSettingsCollection() const;
-
-		void EnableOptimizedBuildSupport();
-		bool IsOptimizedBuildSupportEnabled() const;
 
 		void AddExcludedLineRegex(const std::wstring&);
 		const std::vector<std::wstring>& GetExcludedLineRegexes() const;
@@ -106,6 +109,7 @@ namespace CppCoverage
 		bool isContinueAfterCppExceptionModeEnabled_;
         bool isStopOnAssertModeEnabled_;
         bool isOptimizedBuildSupportEnabled_;
+		bool isDebugCallbackEnabled_;
         std::vector<OptionsExport> exports_;
 		std::vector<std::filesystem::path> inputCoveragePaths_;
 		std::vector<UnifiedDiffSettings> unifiedDiffSettingsCollection_;

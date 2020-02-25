@@ -23,9 +23,11 @@
 
 #include "CppCoverageExport.hpp"
 #include "SubstitutePdbSourcePath.hpp"
+#include "Plugin/Exporter/CoverageData.hpp"
 
 namespace CppCoverage
 {
+
 	class CPPCOVERAGE_DLL RunCoverageSettings
 	{
 	public:
@@ -44,6 +46,7 @@ namespace CppCoverage
         void SetStopOnAssert(bool);
         void SetMaxUnmatchPathsForWarning(size_t);
 		void SetOptimizedBuildSupport(bool);
+		void SetDebugCallbackFunction(std::function<void(std::string, Plugin::CoverageData)>);
 
 		const StartInfo& GetStartInfo() const;
 		const CoverageFilterSettings& GetCoverageFilterSettings() const;
@@ -53,6 +56,7 @@ namespace CppCoverage
         bool GetStopOnAssert() const;
         size_t GetMaxUnmatchPathsForWarning() const;
 		bool GetOptimizedBuildSupport() const;
+		std::function<void(std::string, Plugin::CoverageData)> GetDebugCallbackFunction() const;
 		const std::vector<std::wstring>& GetExcludedLineRegexes() const;
 		const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
 
@@ -67,5 +71,6 @@ namespace CppCoverage
 		bool optimizedBuildSupport_;
 		std::vector<std::wstring> excludedLineRegexes_;
 		std::vector<SubstitutePdbSourcePath> substitutePdbSourcePath_;
+		std::function<void(std::string, Plugin::CoverageData)> debugCallbackFunction_;
 	};
 }

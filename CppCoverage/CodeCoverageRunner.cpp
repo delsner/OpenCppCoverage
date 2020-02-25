@@ -78,6 +78,17 @@ namespace CppCoverage
 		    std::make_unique<DebugInformationEnumerator>(settings.GetSubstitutePdbSourcePaths()),
 			filterAssistant_);
 
+		if (settings.GetDebugCallbackFunction() != nullptr)
+		{
+			// set debug callback function, which captures *all* enclosing variables by reference
+			auto debugCallbackFunction = [&](std::string debugString) -> void {
+				auto coverageData = executedAddressManager_->CreateCoverageData(settings.GetStartInfo().GetPath().filename().wstring(), 0);
+				executedAddressManager_->RestoreCoverage();
+				settings.GetDebugCallbackFunction()(debugString, std::move(coverageData));
+			};
+			debugger.SetDebugCallbackFunction(debugCallbackFunction);
+		}
+
 		const auto& startInfo = settings.GetStartInfo();
 		int exitCode = debugger.Debug(startInfo, *this);
 		const auto& path = startInfo.GetPath();

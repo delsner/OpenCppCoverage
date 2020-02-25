@@ -182,6 +182,17 @@ namespace OpenCppCoverage
                 runCoverageSettings.SetStopOnAssert(options.IsStopOnAssertModeEnabled());
                 runCoverageSettings.SetMaxUnmatchPathsForWarning(maxUnmatchPathsForWarning);
 				runCoverageSettings.SetOptimizedBuildSupport(options.IsOptimizedBuildSupportEnabled());
+				// add debug callback function if option enabled
+				if (options.IsDebugCallbackEnabled())
+				{
+					auto debugCallbackFunction = [&](std::string debugString, Plugin::CoverageData coverageData) -> void {
+						auto htmlExporter = Exporter::HtmlExporter(GetTemplateFolder());
+						std::filesystem::path output = std::filesystem::path(GetDefaultPathPrefix(options)) / "runtimedump" / debugString;
+						htmlExporter.Export(coverageData, output);
+					};
+					runCoverageSettings.SetDebugCallbackFunction(debugCallbackFunction);
+				}
+				
 				auto coverageData = codeCoverageRunner.RunCoverage(runCoverageSettings);
 				exitCode = coverageData.GetExitCode();
 				coveraDatas.push_back(std::move(coverageData));
@@ -234,7 +245,7 @@ namespace OpenCppCoverage
 			}
 			catch (...)
 			{
-				LOG_ERROR << "Unkown Error";
+				LOG_ERROR << "Unknown Error";
 			}
 
 			warningManager->DisplayWarnings();

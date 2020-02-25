@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "RunCoverageSettings.hpp"
 
+
 namespace CppCoverage
 {
 	//-------------------------------------------------------------------------
@@ -34,7 +35,8 @@ namespace CppCoverage
 	      maxUnmatchPathsForWarning_{0},
 	      optimizedBuildSupport_{false},
 	      excludedLineRegexes_{excludedLineRegexes},
-	      substitutePdbSourcePath_{substitutePdbSourcePath}
+	      substitutePdbSourcePath_{substitutePdbSourcePath},
+		  debugCallbackFunction_{nullptr}
 	{
 	}
 
@@ -66,6 +68,18 @@ namespace CppCoverage
 	void RunCoverageSettings::SetOptimizedBuildSupport(bool optimizedBuildSupport)
 	{
 		optimizedBuildSupport_ = optimizedBuildSupport;
+	}
+
+	//-------------------------------------------------------------------------
+	void RunCoverageSettings::SetDebugCallbackFunction(std::function<void(std::string, Plugin::CoverageData)> debugCallbackFunction)
+	{
+		debugCallbackFunction_ = debugCallbackFunction;
+	}
+
+	//-------------------------------------------------------------------------
+	std::function<void(std::string, Plugin::CoverageData)> RunCoverageSettings::GetDebugCallbackFunction() const
+	{
+		return debugCallbackFunction_;
 	}
 
 	//-------------------------------------------------------------------------
