@@ -245,7 +245,7 @@ namespace OpenCppCoverage
 			}
 			catch (...)
 			{
-				LOG_ERROR << "Unkown Error";
+				LOG_ERROR << "Unknown Error";
 			}
 
 			warningManager->DisplayWarnings();
